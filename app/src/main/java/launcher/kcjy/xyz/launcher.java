@@ -2,15 +2,27 @@ package launcher.kcjy.xyz;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
+
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.button.MaterialButton;
+
 import launcher.kcjy.xyz.library.NewAppButton;
 import launcher.kcjy.xyz.library.Tools;
 
 public class launcher extends AppCompatActivity {
    private Context mContext;
+   private EditText edit;
+
+
       @Override
     protected void onCreate(Bundle savedInstanceState) {
 		
@@ -101,12 +113,66 @@ public class launcher extends AppCompatActivity {
                 case 1:
                 break;
                 case 2:
-
+appdialogcheck();
                     break;
                 default:
                 break;
             }
             }
+        }
+
+    class dialogbtnonclick implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            if (edit.getText().toString().contains("kingcrimsonjy")) {
+                switch (v.getId()) {
+                    case 1:
+Tools.Applist(mContext,false);
+                        break;
+                    case 2:
+Tools.Applist(mContext,true);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else {
+                Toast.makeText(mContext,"错误",Toast.LENGTH_SHORT).show();
+            }
+            edit.setText("");
+            }
+        }
+
+        @SuppressLint("ResourceType")
+        private void appdialogcheck(){
+            LinearLayout layout = new LinearLayout(mContext);
+            layout.setOrientation(LinearLayout.VERTICAL);
+            layout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+            edit = new EditText(mContext);
+            edit.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            edit.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+            MaterialButton user = new MaterialButton(mContext);
+            user.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            user.setText("用户应用");
+
+            MaterialButton system = new MaterialButton(mContext);
+            system.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            system.setText("系统应用");
+
+            layout.addView(edit);
+            layout.addView(user);
+            layout.addView(system);
+            user.setId(1);
+            system.setId(2);
+            user.setOnClickListener(new dialogbtnonclick());
+            system.setOnClickListener(new dialogbtnonclick());
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+            dialog.setCancelable(true);
+            dialog.setView(layout);
+            dialog.create().show();
         }
 
 }

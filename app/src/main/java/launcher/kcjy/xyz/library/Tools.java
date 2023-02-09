@@ -6,9 +6,14 @@ import android.content.DialogInterface;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
+import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.app.Activity;
@@ -16,9 +21,11 @@ import android.content.Intent;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.dialog.MaterialDialogs;
+import com.google.android.material.textview.MaterialTextView;
 
 import java.util.List;
 
@@ -49,16 +56,55 @@ dialog.dismiss();
             layout.setOrientation(LinearLayout.HORIZONTAL);
             layout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,100));
 
-          /*  image.setIcon(p.applicationInfo.loadIcon(pkgmanager));
-            name.setLabel(pkgmanager.getApplicationLabel(p.applicationInfo).toString());
-            pkgname.setPackage_name(p.applicationInfo.packageName);*/
+            ImageView appimage = new ImageView(context);
+            appimage.setLayoutParams(new LinearLayout.LayoutParams(100,ViewGroup.LayoutParams.MATCH_PARENT));
+
+            LinearLayout sublayout = new LinearLayout(context);
+            sublayout.setOrientation(LinearLayout.VERTICAL);
+            sublayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            sublayout.setGravity(Gravity.CENTER);
+
+            MaterialTextView appname = new MaterialTextView(context);
+            appname.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            appname.setTextSize(18);
+            appname.setTypeface(null, Typeface.BOLD);
+
+            MaterialTextView pkgname = new MaterialTextView(context);
+            pkgname.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            pkgname.setTextSize(13);
+
+            layout.addView(appimage);
+            layout.addView(sublayout);
+            sublayout.addView(appname);
+            sublayout.addView(pkgname);
+
+            appimage.setImageDrawable(p.applicationInfo.loadIcon(pkgmanager));
+            appname.setText(pkgmanager.getApplicationLabel(p.applicationInfo).toString());
+            pkgname.setText(p.applicationInfo.packageName);
+            layout.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    uninstallapp(context,pkgname.getText().toString());
+                    return false;
+                }
+            });
+            layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startapp(context,pkgname.getText().toString());
+                }
+            });
             int flags = p.applicationInfo.flags;
-            if ((flags & ApplicationInfo.FLAG_SYSTEM) != 0&&isSystem){}
-            else{
-               // Appinfo.add(bean);
+            if (isSystem){
+                mainlayout.addView(layout);
+            }
+            else {
+                if ((flags & ApplicationInfo.FLAG_SYSTEM) == 0){
+                    mainlayout.addView(layout);
+                }
             }
         }
-
+appdialog.create().show();
     }
 
     public  static void Network(Context context) {
@@ -116,5 +162,14 @@ dialog.dismiss();
 		context.startActivity(intent);
 		return true;
 	}
+    public static boolean uninstallapp(Context context, String packagename) {
+        if (TextUtils.isEmpty(packagename)){
+            return false;
+        }
+        Intent intent = new Intent(Intent.ACTION_DELETE, Uri.parse("package:"+packagename));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+        return true;
+    }
     
 }
