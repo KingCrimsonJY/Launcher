@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+    android:background="#ffffffff"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent">
+
+    <LinearLayout
+         android:layout_height="336dp"
+         android:layout_width="640dp"
+         android:weightSum="3"
+         android:background="@color/black"
+         android:orientation="vertical">
+
+        <LinearLayout
+             android:layout_height="0dp"
+             android:layout_width="match_parent"
+             android:weightSum="6"
+             android:orientation="horizontal"
+             android:layout_weight="1"
+             android:id="@+id/layout1">
+
+        </LinearLayout>
+
+        <LinearLayout
+             android:layout_height="0dp"
+             android:layout_width="match_parent"
+             android:weightSum="5"
+             android:orientation="horizontal"
+             android:layout_weight="1">
+
+        </LinearLayout>
+
+        <LinearLayout
+             android:layout_height="0dp"
+             android:layout_width="match_parent"
+             android:gravity="bottom|center"
+             android:paddingRight="85dp"
+             android:orientation="horizontal"
+             android:paddingLeft="85dp"
+             android:layout_weight="1"
+             android:paddingTop="20dp">
+
+            <com.google.android.material.card.MaterialCardView
+                 android:layout_height="match_parent"
+                 android:layout_width="match_parent"
+                 app:cardBackgroundColor="@color/grey"
+                 app:cardCornerRadius="12dp">
+
+                <LinearLayout
+                     android:layout_height="match_parent"
+                     android:layout_width="match_parent"
+                     android:weightSum="6"
+                     android:gravity="center"
+                     android:orientation="horizontal"
+                     android:id="@+id/bottomapp">
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
