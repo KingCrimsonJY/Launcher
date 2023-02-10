@@ -46,10 +46,12 @@ public class launcher extends AppCompatActivity {
       NewAppButton himalaya = new NewAppButton(mContext,R.drawable.himalaya,"喜马拉雅",14);
       NewAppButton speaking = new NewAppButton(mContext,R.drawable.speaking,"有道口语",14);
       NewAppButton browser = new NewAppButton(mContext,R.drawable.browser,"browser",17);
+      NewAppButton player = new NewAppButton(mContext,R.drawable.player,"音乐播放器",17);
       NewAppButton applist = new NewAppButton(mContext,R.drawable.applist,"应用列表",17);
       LinearLayout layout1 = findViewById(R.id.layout1);
       LinearLayout bottomapp = findViewById(R.id.bottomapp);
         layout1.addView(browser);
+        layout1.addView(player);
         layout1.addView(applist);
         bottomapp.addView(youdao);
         bottomapp.addView(calculator);
@@ -59,7 +61,8 @@ public class launcher extends AppCompatActivity {
         bottomapp.addView(speaking);
         
         browser.setId(1);
-        applist.setId(2);
+        player.setId(2);
+        applist.setId(3);
         
         youdao.setId(1);
         calculator.setId(2);
@@ -75,8 +78,10 @@ public class launcher extends AppCompatActivity {
         himalaya.setOnClickListener(new bottomapponclick());
         speaking.setOnClickListener(new bottomapponclick());
 
-        applist.setOnClickListener(new apponclick());
         browser.setOnClickListener(new apponclick());
+        player.setOnClickListener(new apponclick());
+        applist.setOnClickListener(new apponclick());
+
     }
     
         class bottomapponclick implements View.OnClickListener {
@@ -113,8 +118,11 @@ public class launcher extends AppCompatActivity {
                 case 1:
                 break;
                 case 2:
-appdialogcheck();
-                    break;
+
+                break;
+                case 3:
+                    appdialogcheck();
+               break;
                 default:
                 break;
             }
