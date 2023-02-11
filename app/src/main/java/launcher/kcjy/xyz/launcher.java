@@ -1,6 +1,7 @@
 package launcher.kcjy.xyz;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
 
+import launcher.kcjy.xyz.App.album.albumActivity;
 import launcher.kcjy.xyz.library.NewAppButton;
 import launcher.kcjy.xyz.library.Tools;
 
@@ -46,12 +48,12 @@ public class launcher extends AppCompatActivity {
       NewAppButton himalaya = new NewAppButton(mContext,R.drawable.himalaya,"喜马拉雅",14);
       NewAppButton speaking = new NewAppButton(mContext,R.drawable.speaking,"有道口语",14);
       NewAppButton browser = new NewAppButton(mContext,R.drawable.browser,"browser",17);
-      NewAppButton player = new NewAppButton(mContext,R.drawable.player,"音乐播放器",17);
+      NewAppButton album = new NewAppButton(mContext,R.drawable.album,"相册",17);
       NewAppButton applist = new NewAppButton(mContext,R.drawable.applist,"应用列表",17);
       LinearLayout layout1 = findViewById(R.id.layout1);
       LinearLayout bottomapp = findViewById(R.id.bottomapp);
         layout1.addView(browser);
-        layout1.addView(player);
+        layout1.addView(album);
         layout1.addView(applist);
         bottomapp.addView(youdao);
         bottomapp.addView(calculator);
@@ -61,7 +63,7 @@ public class launcher extends AppCompatActivity {
         bottomapp.addView(speaking);
         
         browser.setId(1);
-        player.setId(2);
+        album.setId(2);
         applist.setId(3);
         
         youdao.setId(1);
@@ -79,7 +81,7 @@ public class launcher extends AppCompatActivity {
         speaking.setOnClickListener(new bottomapponclick());
 
         browser.setOnClickListener(new apponclick());
-        player.setOnClickListener(new apponclick());
+        album.setOnClickListener(new apponclick());
         applist.setOnClickListener(new apponclick());
 
     }
@@ -116,6 +118,7 @@ public class launcher extends AppCompatActivity {
 		public void onClick(View v) {
             switch(v.getId()){
                 case 1:
+
                 break;
                 case 2:
 

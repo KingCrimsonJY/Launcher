@@ -11,7 +11,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +24,77 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.dialog.MaterialDialogs;
 import com.google.android.material.textview.MaterialTextView;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
+import launcher.kcjy.xyz.launcher;
+import launcher.kcjy.xyz.variable;
+
 public class Tools {
+
+    public static void update(Context context){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    String str = null;
+                    JSONObject jsonObject = new JSONObject(UrlPost(variable.url,""));
+                    String version = jsonObject.getString("version");
+                    boolean usestate = jsonObject.getBoolean("usestate");
+                    String downloadlink = jsonObject.getString("downloadlink");
+                    if (!usestate){
+                        str = "unusable";
+                       context.startActivity(new Intent(context, launcher.class));
+                    }
+                    else if(!variable.nowversion.equals(version)) {
+                        str = "update";
+                    }
+                    else {
+                        Log.e(null,"normal");
+                    }
+                    if (!str.equals(null)) {
+                        Looper.prepare();
+                        Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
+                        Looper.loop();
+                    }
+                }catch (Exception e) { }
+            }
+        }).start();
+    }
+
+    public static String UrlPost(String ur, String byteString) {
+        String str="";
+        try {
+            URL url=new URL(ur);
+            HttpURLConnection HttpURLConnection=(HttpURLConnection) url.openConnection();
+            HttpURLConnection.setReadTimeout(9000);
+            HttpURLConnection.setRequestMethod("POST");
+            OutputStream outputStream = HttpURLConnection.getOutputStream();
+            outputStream.write(byteString.getBytes());
+            BufferedReader BufferedReader=new BufferedReader(new InputStreamReader(HttpURLConnection.getInputStream()));
+            String String="";
+            StringBuffer StringBuffer=new StringBuffer();
+            while ((String = BufferedReader.readLine()) != null) {
+                StringBuffer.append(String);
+            }
+            str = StringBuffer.toString();
+        } catch (IOException e) {}
+        return str;
+    }
+
     public static void Applist(Context context, boolean isSystem){
       AlertDialog.Builder appdialog = new AlertDialog.Builder(context);
         appdialog.setTitle("应用列表");
