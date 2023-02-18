@@ -45,35 +45,6 @@ import launcher.kcjy.xyz.variable;
 
 public class Tools {
 
-    public static void update(Context context){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    String str = null;
-                    JSONObject jsonObject = new JSONObject(UrlPost(variable.url,""));
-                    String version = jsonObject.getString("version");
-                    boolean usestate = jsonObject.getBoolean("usestate");
-                    String downloadlink = jsonObject.getString("downloadlink");
-                    if (!usestate){
-                        str = "unusable";
-                       context.startActivity(new Intent(context, launcher.class));
-                    }
-                    else if(!variable.nowversion.equals(version)) {
-                        str = "update";
-                    }
-                    else {
-                        Log.e(null,"normal");
-                    }
-                    if (!str.equals(null)) {
-                        Looper.prepare();
-                        Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
-                        Looper.loop();
-                    }
-                }catch (Exception e) { }
-            }
-        }).start();
-    }
 
     public static String UrlPost(String ur, String byteString) {
         String str="";

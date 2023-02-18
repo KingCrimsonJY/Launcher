@@ -19,6 +19,7 @@ import com.google.android.material.button.MaterialButton;
 import launcher.kcjy.xyz.App.album.albumActivity;
 import launcher.kcjy.xyz.library.NewAppButton;
 import launcher.kcjy.xyz.library.Tools;
+import launcher.kcjy.xyz.library.update;
 
 public class launcher extends AppCompatActivity {
    private Context mContext;
@@ -47,7 +48,7 @@ public class launcher extends AppCompatActivity {
       NewAppButton clock = new NewAppButton(mContext,R.drawable.clock,"时钟",14);
       NewAppButton himalaya = new NewAppButton(mContext,R.drawable.himalaya,"喜马拉雅",14);
       NewAppButton speaking = new NewAppButton(mContext,R.drawable.speaking,"有道口语",14);
-      NewAppButton browser = new NewAppButton(mContext,R.drawable.browser,"browser",17);
+      NewAppButton browser = new NewAppButton(mContext,R.drawable.mryytl,"每日英语听力",17);
       NewAppButton album = new NewAppButton(mContext,R.drawable.album,"相册",17);
       NewAppButton applist = new NewAppButton(mContext,R.drawable.applist,"应用列表",17);
       LinearLayout layout1 = findViewById(R.id.layout1);
