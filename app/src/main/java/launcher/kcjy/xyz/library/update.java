@@ -41,21 +41,15 @@ public class update {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String state;
                 try{
                     String content = Tools.UrlPost(variable.url,"");
                         JSONObject jsonObject = new JSONObject(content);
                         String version = jsonObject.getString("version");
                         boolean usestate = jsonObject.getBoolean("usestate");
                         downloadlink = jsonObject.getString("downloadlink");
-                        if (!usestate) {
-                            state = "unusable";
-                        } else if (!variable.nowversion.equals(version)) {
-                            state = "update";
+                       if (!variable.nowversion.equals(version)) {
+
                     }
-                        else {
-                            state = "normal";
-                        }
 
                 }catch (Exception e) {}
             }
