@@ -1,18 +1,25 @@
 package launcher.kcjy.xyz;
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.button.MaterialButton;
 
@@ -84,7 +91,7 @@ public class launcher extends AppCompatActivity {
         browser.setOnClickListener(new apponclick());
         album.setOnClickListener(new apponclick());
         applist.setOnClickListener(new apponclick());
-
+getReadPermissions();
     }
     
         class bottomapponclick implements View.OnClickListener {
@@ -119,7 +126,8 @@ public class launcher extends AppCompatActivity {
 		public void onClick(View v) {
             switch(v.getId()){
                 case 1:
-
+update update = new update(mContext);
+update.checkupdate();
                 break;
                 case 2:
 
@@ -186,5 +194,56 @@ Tools.Applist(mContext,true);
             dialog.setView(layout);
             dialog.create().show();
         }
+    private void getReadPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                    Manifest.permission.READ_EXTERNAL_STORAGE}, 10001);
+                } else {//没有则请求获取权限，示例权限是：存储权限，需要其他权限请更改或者替换
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{
+                                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, 10001);
+                }
+            } else {//如果已经获取到了权限则直接进行下一步操作
+                Log.e(null, "全部权限已经授权成功");
+            }
+        }
+
+    }
+
+    /**
+     * 一个或多个权限请求结果回调
+     * 循环回调获取权限，除非勾选禁止后不再询问，之后提示用户引导用户去设置
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case 10001:
+                for (int i = 0; i < grantResults.length; i++) {
+//                   如果拒绝获取权限
+                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                        //判断是否勾选禁止后不再询问
+                        boolean flag = ActivityCompat.shouldShowRequestPermissionRationale(this, permissions[i]);
+                        if (flag) {
+                            getReadPermissions();
+                            return;//用户权限是一个一个的请求的，只要有拒绝，剩下的请求就可以停止，再次请求打开权限了
+                        } else { // 勾选不再询问，并拒绝
+                            Toast.makeText(this, "请到设置中打开权限", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                    }
+                }
+                //Toast.makeText(this, "权限开启完成", Toast.LENGTH_LONG).show();
+                break;
+            default:
+                break;
+        }
+
+    }
 
 }

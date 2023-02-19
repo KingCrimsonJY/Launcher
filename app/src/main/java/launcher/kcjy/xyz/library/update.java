@@ -1,63 +1,161 @@
 package launcher.kcjy.xyz.library;
 
-import android.app.Activity;
-import android.app.Dialog;
-import android.app.DownloadManager;
-import android.content.BroadcastReceiver;
+import static android.app.Activity.RESULT_CANCELED;
+
+import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.database.Cursor;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
+import android.view.Gravity;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.dialog.MaterialDialogs;
-
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.util.logging.Logger;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import launcher.kcjy.xyz.BuildConfig;
-import launcher.kcjy.xyz.library.Tools;
-import launcher.kcjy.xyz.launcher;
 import launcher.kcjy.xyz.variable;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 public class update {
-    public String path = "/storage/emulated/0/Android/data/launcher.kcjy.xyz/files/1.apk";
-    public String downloadlink;   //下载链接
+private Context context;
+private ProgressDialog progressdialog;
+private String downloadlink;
+private int progress;
+    private static final int DOWN_UPDATE = 1;
+    private static final int DOWN_OVER = 2;
+    public update(Context mcontext){
+    this.context = mcontext;
+}
 
-
-    public void update(){
-
+    public void checkupdate(){
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try{
-                    String content = Tools.UrlPost(variable.url,"");
-                        JSONObject jsonObject = new JSONObject(content);
-                        String version = jsonObject.getString("version");
-                        boolean usestate = jsonObject.getBoolean("usestate");
-                        downloadlink = jsonObject.getString("downloadlink");
-                       if (!variable.nowversion.equals(version)) {
+                try {
+                    String content = Tools.UrlPost(variable.url, "");
+                    JSONObject jsonObject = new JSONObject(content);
+                    int version = jsonObject.getInt("version");
+                    boolean usestate = jsonObject.getBoolean("usestate");
+                    downloadlink = jsonObject.getString("downloadlink");
+                   // if (variable.nowversion != version) {}
 
-                    }
 
                 }catch (Exception e) {}
             }
         }).start();
+        updatedialog();
     }
+private void updatedialog(){
+    AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+    dialog.setCancelable(false);
+    dialog.setTitle("Update");
+    dialog.setMessage("pleas download");
+    dialog.setPositiveButton("Download", new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            downloaddialog();
+        }
+    });
+    dialog.create().show();
+}
+private void downloaddialog(){
+        download();
+    progressdialog = new ProgressDialog(context);
+    progressdialog.setCancelable(false);
+    progressdialog.setCanceledOnTouchOutside(false);
+    progressdialog.setTitle("Downloading");
+    progressdialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+    progressdialog.show();
+    progressdialog.setMax(100);
 
+}
+private void download(){
+    Thread downloadthread = new Thread(downapkrunnable);
+    downloadthread.start();
+}
+private Runnable downapkrunnable = new Runnable() {
+    @Override
+    public void run() {
+        URL url;
+        try {
+          url = new URL(downloadlink);
+            HttpURLConnection con = (HttpURLConnection) url
+                    .openConnection();
+            con.connect();
+            int length = con.getContentLength();
+            InputStream ins = con.getInputStream();
+            File file = new File(variable.path);
+            if (!file.exists()){
+                file.mkdir();
+            }
+            File apkFile = new File(variable.filename);
+            FileOutputStream fos = new FileOutputStream(apkFile);
+            int count = 0;
+            byte[] buf = new byte[1024];
+            while (true) {
+                int numread = ins.read(buf);
+                count += numread;
+                progress = (int) (((float) count / length) * 100);
+// 下载进度
+                mHandler.sendEmptyMessage(DOWN_UPDATE);
+                if (numread <= 0) {
+// 下载完成通知安装
+                    mHandler.sendEmptyMessage(DOWN_OVER);
+                    break;
+                }
+                fos.write(buf, 0, numread);
+            }
+            fos.close();
+            ins.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+};
+    private Handler mHandler = new Handler() {
+        @SuppressLint("HandlerLeak")
+        public void handleMessage(android.os.Message msg) {
+            switch (msg.what) {
+                case DOWN_UPDATE:
+                    progressdialog.setProgress(progress);
+                    break;
+                case DOWN_OVER:
+                    installApp(variable.filename);
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
-    private void installApp(String apkPath,Context context) {
+    private void installApp(String apkPath) {
         try {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             //版本在7.0以上是不能直接通过uri访问的
@@ -78,5 +176,4 @@ public class update {
             e.printStackTrace();
         }
     }
-
 }
