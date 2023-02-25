@@ -1,47 +1,30 @@
 package launcher.kcjy.xyz.library;
 
-import static android.app.Activity.RESULT_CANCELED;
-
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
-import android.util.Log;
-import android.view.Gravity;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
 
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 import launcher.kcjy.xyz.BuildConfig;
 import launcher.kcjy.xyz.variable;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
+
 
 public class update {
 private Context context;
@@ -58,25 +41,30 @@ public String getState(){
         return state;
 }
     public void checkupdate(){
-        try {
-                    String content = Tools.UrlPost(variable.url, "");
-                    JSONObject jsonObject = new JSONObject(content);
-                    int version = jsonObject.getInt("version");
-                    boolean usestate = jsonObject.getBoolean("usestate");
-                    downloadlink = jsonObject.getString("downloadlink");
-                  if (usestate){
-                      state = "unusable";
-                  }
-                    else if (variable.nowversion != version) {
-                       state = "update";
-            }
-                    else {
-                        state = "normal";
-                  }
+        if (Tools.Network(context)) {
+            try {
+                String content = Tools.UrlPost(variable.url, "");
+                JSONObject jsonObject = new JSONObject(content);
+                int version = jsonObject.getInt("version");
+                boolean usestate = jsonObject.getBoolean("usestate");
+                downloadlink = jsonObject.getString("downloadlink");
+                if (usestate) {
+                    state = "unusable";
+                } else if (variable.nowversion != version) {
+                    state = "update";
+                    updatedialog();
+                } else {
+                    state = "normal";
+                }
 
-                }catch (Exception e) {}
+            } catch (Exception e) {
+            }
+        }
+        else {
+            state = "unavailable";
+        }
     }
-private void updatedialog(){
+public void updatedialog(){
     AlertDialog.Builder dialog = new AlertDialog.Builder(context);
     dialog.setCancelable(false);
     dialog.setTitle("Update");
@@ -151,7 +139,8 @@ private Runnable downapkrunnable = new Runnable() {
                     progressdialog.setProgress(progress);
                     break;
                 case DOWN_OVER:
-                    installApp(variable.filename);
+                    Toast.makeText(context,"finish",Toast.LENGTH_SHORT).show();
+                installApp(variable.filename);
                     break;
                 default:
                     break;

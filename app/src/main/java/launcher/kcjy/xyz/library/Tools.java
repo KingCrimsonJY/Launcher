@@ -26,6 +26,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.content.FileProvider;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.dialog.MaterialDialogs;
 import com.google.android.material.textview.MaterialTextView;
@@ -44,6 +46,7 @@ import launcher.kcjy.xyz.launcher;
 import launcher.kcjy.xyz.variable;
 
 public class Tools {
+
 
 
     public static String UrlPost(String ur, String byteString) {
@@ -143,28 +146,14 @@ dialog.dismiss();
 appdialog.create().show();
     }
 
-    public  static void Network(Context context) {
+    public static boolean Network(Context context) {
         ConnectivityManager manager = (ConnectivityManager) context
             .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = manager.getActiveNetworkInfo();
-        if (info == null || !info.isConnected()) {
-            new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(50);//检测到无网络状态延迟退出
-                            System.exit(0);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
-            return;
+        if (info != null) {
+            return info.isAvailable();
         }
-        if (info.isRoaming()) {
-            return;
-        }
-        return;
+        return false;
     }
     
     public static void 存储权限(Context context) {

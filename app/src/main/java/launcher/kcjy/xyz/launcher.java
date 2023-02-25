@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.textclassifier.TextLinks;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -23,7 +25,6 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.button.MaterialButton;
 
-import launcher.kcjy.xyz.App.album.albumActivity;
 import launcher.kcjy.xyz.library.NewAppButton;
 import launcher.kcjy.xyz.library.Tools;
 import launcher.kcjy.xyz.library.update;
@@ -92,6 +93,7 @@ public class launcher extends AppCompatActivity {
         album.setOnClickListener(new apponclick());
         applist.setOnClickListener(new apponclick());
 getReadPermissions();
+
     }
     
         class bottomapponclick implements View.OnClickListener {
