@@ -135,12 +135,13 @@ getReadPermissions();
                     break;
                 case 2:
 String str = check();
-if (Tools.checkapp(mContext,"com.eusoft.ting.en")) {
+String Pkgname = "com.eusoft.ting.en";
+if (Tools.checkapp(mContext,Pkgname)) {
     if (str.equals("normal")) {
-        Tools.startapp(mContext, "com.eusoft.ting.en");
+        Tools.startapp(mContext, Pkgname);
     } else {
         ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        am.killBackgroundProcesses("com.eusoft.ting.en");
+        am.killBackgroundProcesses(Pkgname);
     }
 }
 else {
