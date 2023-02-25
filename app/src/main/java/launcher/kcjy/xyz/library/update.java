@@ -50,27 +50,31 @@ private String downloadlink;
 private int progress;
     private static final int DOWN_UPDATE = 1;
     private static final int DOWN_OVER = 2;
+    public String state;
     public update(Context mcontext){
     this.context = mcontext;
 }
-
+public String getState(){
+        return state;
+}
     public void checkupdate(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
+        try {
                     String content = Tools.UrlPost(variable.url, "");
                     JSONObject jsonObject = new JSONObject(content);
                     int version = jsonObject.getInt("version");
                     boolean usestate = jsonObject.getBoolean("usestate");
                     downloadlink = jsonObject.getString("downloadlink");
-                   // if (variable.nowversion != version) {}
-
+                  if (usestate){
+                      state = "unusable";
+                  }
+                    else if (variable.nowversion != version) {
+                       state = "update";
+            }
+                    else {
+                        state = "normal";
+                  }
 
                 }catch (Exception e) {}
-            }
-        }).start();
-        updatedialog();
     }
 private void updatedialog(){
     AlertDialog.Builder dialog = new AlertDialog.Builder(context);

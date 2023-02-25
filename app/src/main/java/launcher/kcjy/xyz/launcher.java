@@ -126,9 +126,17 @@ getReadPermissions();
 		public void onClick(View v) {
             switch(v.getId()){
                 case 1:
-update update = new update(mContext);
-update.checkupdate();
-                break;
+                    update up = new update(mContext);
+Thread thread = new Thread(new Runnable() {
+    @Override
+    public void run() {
+        up.checkupdate();
+    }
+});
+thread.start();
+while (thread.isAlive()){}
+                    Toast.makeText(mContext,up.getState(), Toast.LENGTH_SHORT).show();
+                    break;
                 case 2:
 
                 break;
