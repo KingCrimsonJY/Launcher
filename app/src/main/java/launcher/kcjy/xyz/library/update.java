@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -37,10 +38,10 @@ private int progress;
     public update(Context mcontext){
     this.context = mcontext;
 }
-public String getState(){
-        return state;
-}
-    public void checkupdate(){
+    public String checkupdate(){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
         if (Tools.Network(context)) {
             try {
                 String content = Tools.UrlPost(variable.url, "");
@@ -63,10 +64,16 @@ public String getState(){
         else {
             state = "unavailable";
         }
+
+            }
+        });
+        thread.start();
+        while (thread.isAlive()){}
+        return state;
     }
 public void updatedialog(){
     AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-    dialog.setCancelable(false);
+    dialog.setCancelable(true);
     dialog.setTitle("Update");
     dialog.setMessage("pleas download");
     dialog.setPositiveButton("Download", new DialogInterface.OnClickListener() {

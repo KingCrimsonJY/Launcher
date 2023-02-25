@@ -179,7 +179,17 @@ appdialog.create().show();
             }
         }
     }
-    
+    public static boolean checkapp(Context context,String pkgname){
+if (TextUtils.isEmpty(pkgname)){
+    return false;
+}
+try {
+context.getPackageManager().getApplicationInfo(pkgname,0);
+}catch (Exception e){
+    return false;
+}
+return true;
+    }
     public static boolean startapp(Context context, String packagename) {
 		PackageManager packageManager=context.getPackageManager();
 		Intent intent=new Intent();

@@ -1,11 +1,13 @@
 package launcher.kcjy.xyz;
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.provider.Settings;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -56,24 +58,25 @@ public class launcher extends AppCompatActivity {
       NewAppButton clock = new NewAppButton(mContext,R.drawable.clock,"时钟",14);
       NewAppButton himalaya = new NewAppButton(mContext,R.drawable.himalaya,"喜马拉雅",14);
       NewAppButton speaking = new NewAppButton(mContext,R.drawable.speaking,"有道口语",14);
-      NewAppButton browser = new NewAppButton(mContext,R.drawable.mryytl,"每日英语听力",17);
-      NewAppButton album = new NewAppButton(mContext,R.drawable.album,"相册",17);
       NewAppButton applist = new NewAppButton(mContext,R.drawable.applist,"应用列表",17);
+      NewAppButton browser = new NewAppButton(mContext,R.drawable.mryytl,"每日英语听力",17);
+
       LinearLayout layout1 = findViewById(R.id.layout1);
       LinearLayout bottomapp = findViewById(R.id.bottomapp);
-        layout1.addView(browser);
-        layout1.addView(album);
         layout1.addView(applist);
+        layout1.addView(browser);
+
         bottomapp.addView(youdao);
         bottomapp.addView(calculator);
         bottomapp.addView(calendar);
         bottomapp.addView(clock);
         bottomapp.addView(himalaya);
         bottomapp.addView(speaking);
-        
-        browser.setId(1);
-        album.setId(2);
-        applist.setId(3);
+
+        applist.setId(1);
+        browser.setId(2);
+
+
         
         youdao.setId(1);
         calculator.setId(2);
@@ -89,9 +92,9 @@ public class launcher extends AppCompatActivity {
         himalaya.setOnClickListener(new bottomapponclick());
         speaking.setOnClickListener(new bottomapponclick());
 
-        browser.setOnClickListener(new apponclick());
-        album.setOnClickListener(new apponclick());
         applist.setOnClickListener(new apponclick());
+        browser.setOnClickListener(new apponclick());
+
 getReadPermissions();
 
     }
@@ -128,23 +131,22 @@ getReadPermissions();
 		public void onClick(View v) {
             switch(v.getId()){
                 case 1:
-                    update up = new update(mContext);
-Thread thread = new Thread(new Runnable() {
-    @Override
-    public void run() {
-        up.checkupdate();
-    }
-});
-thread.start();
-while (thread.isAlive()){}
-                    Toast.makeText(mContext,up.getState(), Toast.LENGTH_SHORT).show();
+                    appdialogcheck();
                     break;
                 case 2:
-
+String str = check();
+if (Tools.checkapp(mContext,"com.eusoft.ting.en")) {
+    if (str.equals("normal")) {
+        Tools.startapp(mContext, "com.eusoft.ting.en");
+    } else {
+        ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        am.killBackgroundProcesses("com.eusoft.ting.en");
+    }
+}
+else {
+    Toast.makeText(mContext, "App not installed", Toast.LENGTH_SHORT).show();
+}
                 break;
-                case 3:
-                    appdialogcheck();
-               break;
                 default:
                 break;
             }
@@ -203,6 +205,14 @@ Tools.Applist(mContext,true);
             dialog.setCancelable(true);
             dialog.setView(layout);
             dialog.create().show();
+        }
+
+        private String check(){
+            update up = new update(mContext);
+            if (up.checkupdate().equals("unusable")||up.checkupdate().equals("unavailable")) {
+                Toast.makeText(mContext, up.checkupdate(), Toast.LENGTH_SHORT).show();
+            }
+            return up.checkupdate();
         }
     private void getReadPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
