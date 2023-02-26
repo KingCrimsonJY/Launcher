@@ -155,24 +155,13 @@ private Runnable downapkrunnable = new Runnable() {
     };
 
     private void installApp(String apkPath) {
-        try {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            //版本在7.0以上是不能直接通过uri访问的
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                File file = (new File(apkPath));
-                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                Uri contentUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", file);
-                intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
-            } else {
-                intent.setDataAndType(Uri.fromFile(new File(apkPath)),
-                        "application/vnd.android.package-archive");
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            }
+        File file = new File(apkPath);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Uri uri = FileProvider.getUriForFile(context, "launcher.kcjy.xyz.fileprovider", file);
+            intent.setDataAndType(uri, "application/vnd.android.package-archive");
             context.startActivity(intent);
-            //必须加入，不然不会显示安装成功界面
             android.os.Process.killProcess(android.os.Process.myPid());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }
