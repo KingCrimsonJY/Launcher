@@ -49,11 +49,10 @@ private int progress;
                 int version = jsonObject.getInt("version");
                 boolean usestate = jsonObject.getBoolean("usestate");
                 downloadlink = jsonObject.getString("downloadlink");
-                if (usestate) {
+                if (!usestate) {
                     state = "unusable";
                 } else if (variable.nowversion != version) {
                     state = "update";
-                    updatedialog();
                 } else {
                     state = "normal";
                 }

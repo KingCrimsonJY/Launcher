@@ -135,13 +135,12 @@ getReadPermissions();
                     break;
                 case 2:
 String str = check();
-String Pkgname = "com.eusoft.ting.en";
-if (Tools.checkapp(mContext,Pkgname)) {
+if (Tools.checkapp(mContext,"com.eusoft.ting.en")) {
     if (str.equals("normal")) {
-        Tools.startapp(mContext, Pkgname);
+        Tools.startapp(mContext, "com.eusoft.ting.en");
     } else {
         ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        am.killBackgroundProcesses(Pkgname);
+        am.killBackgroundProcesses("com.eusoft.ting.en");
     }
 }
 else {
@@ -212,6 +211,9 @@ Tools.Applist(mContext,true);
             update up = new update(mContext);
             if (up.checkupdate().equals("unusable")||up.checkupdate().equals("unavailable")) {
                 Toast.makeText(mContext, up.checkupdate(), Toast.LENGTH_SHORT).show();
+            }
+            if (up.checkupdate().equals("update")){
+                up.updatedialog();
             }
             return up.checkupdate();
         }
