@@ -3,6 +3,17 @@ plugins {
 }
 
 android {
+    lint{
+        baseline = file("lint-baseline.xml")
+    }
+    signingConfigs {
+        release {
+            storeFile file('D:\\AndroidStudio\\Projects\\Launcher\\KingCrimson.jks')
+            storePassword 'xiechenhui8'
+            keyAlias 'KingCrimson'
+            keyPassword 'xiechenhi8'
+        }
+    }
     namespace 'launcher.kcjy.xyz'
     compileSdk 33
 
