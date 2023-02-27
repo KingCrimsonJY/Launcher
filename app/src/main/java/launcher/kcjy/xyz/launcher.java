@@ -55,16 +55,16 @@ public class launcher extends AppCompatActivity {
       NewAppButton youdao = new NewAppButton(mContext,R.drawable.youdao,"有道词典",14);
       NewAppButton calculator = new NewAppButton(mContext,R.drawable.calculator,"计算器",14);
       NewAppButton calendar = new NewAppButton(mContext,R.drawable.calendar,"日历",14);
-      NewAppButton clock = new NewAppButton(mContext,R.drawable.clock,"时钟",14);
+      NewAppButton clock = new NewAppButton(mContext, R.drawable.clock,"时钟",14);
       NewAppButton himalaya = new NewAppButton(mContext,R.drawable.himalaya,"喜马拉雅",14);
       NewAppButton speaking = new NewAppButton(mContext,R.drawable.speaking,"有道口语",14);
       NewAppButton applist = new NewAppButton(mContext,R.drawable.applist,"应用列表",17);
-      NewAppButton browser = new NewAppButton(mContext,R.drawable.mryytl,"每日英语听力",17);
+      NewAppButton mryytl = new NewAppButton(mContext,R.drawable.mryytl,"每日英语听力",17);
 
       LinearLayout layout1 = findViewById(R.id.layout1);
       LinearLayout bottomapp = findViewById(R.id.bottomapp);
         layout1.addView(applist);
-        layout1.addView(browser);
+        layout1.addView(mryytl);
 
         bottomapp.addView(youdao);
         bottomapp.addView(calculator);
@@ -74,7 +74,7 @@ public class launcher extends AppCompatActivity {
         bottomapp.addView(speaking);
 
         applist.setId(1);
-        browser.setId(2);
+        mryytl.setId(2);
 
 
         
@@ -93,7 +93,7 @@ public class launcher extends AppCompatActivity {
         speaking.setOnClickListener(new bottomapponclick());
 
         applist.setOnClickListener(new apponclick());
-        browser.setOnClickListener(new apponclick());
+        mryytl.setOnClickListener(new apponclick());
 
 getReadPermissions();
 
