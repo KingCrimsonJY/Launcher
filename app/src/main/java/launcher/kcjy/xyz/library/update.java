@@ -145,7 +145,7 @@ private Runnable downapkrunnable = new Runnable() {
                     progressdialog.setProgress(progress);
                     break;
                 case DOWN_OVER:
-                    Toast.makeText(context,"finish",Toast.LENGTH_SHORT).show();
+            Tools.showtoast("finish");
                 installApp(variable.filename);
                     break;
                 default:

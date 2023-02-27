@@ -32,7 +32,7 @@ import launcher.kcjy.xyz.library.Tools;
 import launcher.kcjy.xyz.library.update;
 
 public class launcher extends AppCompatActivity {
-   private Context mContext;
+   public static Context mContext;
    private EditText edit;
 
 
@@ -210,7 +210,7 @@ Tools.Applist(mContext,true);
         private String check(){
             update up = new update(mContext);
             if (up.checkupdate().equals("unusable")||up.checkupdate().equals("unavailable")) {
-                Toast.makeText(mContext, up.checkupdate(), Toast.LENGTH_SHORT).show();
+                Tools.showtoast(up.checkupdate());
             }
             if (up.checkupdate().equals("update")){
                 up.updatedialog();

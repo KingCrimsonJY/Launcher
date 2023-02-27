@@ -10,6 +10,7 @@ import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Looper;
 import android.text.TextUtils;
@@ -47,8 +48,13 @@ import launcher.kcjy.xyz.variable;
 
 public class Tools {
 
-
-
+public static void showtoast(String string){
+    Toast.makeText(launcher.mContext,string, Toast.LENGTH_SHORT).show();
+}
+    public static void Enablewifi(boolean enable){
+        WifiManager wifiManager = (WifiManager) launcher.mContext.getSystemService(Context.WIFI_SERVICE);
+        wifiManager.setWifiEnabled(enable);
+    }
     public static String UrlPost(String ur, String byteString) {
         String str="";
         try {
