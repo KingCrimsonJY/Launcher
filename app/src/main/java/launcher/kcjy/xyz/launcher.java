@@ -27,12 +27,13 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.button.MaterialButton;
 
+import launcher.kcjy.xyz.App.epub.MenuActivity;
 import launcher.kcjy.xyz.library.NewAppButton;
 import launcher.kcjy.xyz.library.Tools;
 import launcher.kcjy.xyz.library.update;
 
 public class launcher extends AppCompatActivity {
-   public static Context mContext;
+   public Context mContext;
    private EditText edit;
 
 
@@ -59,7 +60,7 @@ public class launcher extends AppCompatActivity {
       NewAppButton himalaya = new NewAppButton(mContext,R.drawable.himalaya,"喜马拉雅",14);
       NewAppButton speaking = new NewAppButton(mContext,R.drawable.speaking,"有道口语",14);
       NewAppButton applist = new NewAppButton(mContext,R.drawable.applist,"应用列表",17);
-      NewAppButton mryytl = new NewAppButton(mContext,R.drawable.mryytl,"每日英语听力",17);
+      NewAppButton mryytl = new NewAppButton(mContext,R.drawable.epub,"Epub阅读器",17);
 
       LinearLayout layout1 = findViewById(R.id.layout1);
       LinearLayout bottomapp = findViewById(R.id.bottomapp);
@@ -134,7 +135,8 @@ getReadPermissions();
                     appdialogcheck();
                     break;
                 case 2:
-String str = check();
+
+/*String str = check();
 if (Tools.checkapp(mContext,"com.eusoft.ting.en")) {
     if (str.equals("normal")) {
         Tools.startapp(mContext, "com.eusoft.ting.en");
@@ -144,8 +146,9 @@ if (Tools.checkapp(mContext,"com.eusoft.ting.en")) {
     }
 }
 else {
-    Toast.makeText(mContext, "App not installed", Toast.LENGTH_SHORT).show();
-}
+  Tools.showtoast("App not installed",mContext);
+}*/
+                 startActivity(new Intent(mContext, MenuActivity.class));
                 break;
                 default:
                 break;
@@ -169,7 +172,7 @@ Tools.Applist(mContext,true);
                 }
             }
             else {
-                Toast.makeText(mContext,"错误",Toast.LENGTH_SHORT).show();
+                Tools.showtoast("error",mContext);
             }
             edit.setText("");
             }
@@ -210,7 +213,7 @@ Tools.Applist(mContext,true);
         private String check(){
             update up = new update(mContext);
             if (up.checkupdate().equals("unusable")||up.checkupdate().equals("unavailable")) {
-                Tools.showtoast(up.checkupdate());
+                Tools.showtoast(up.checkupdate(),mContext);
             }
             if (up.checkupdate().equals("update")){
                 up.updatedialog();
@@ -256,7 +259,7 @@ Tools.Applist(mContext,true);
                             getReadPermissions();
                             return;//用户权限是一个一个的请求的，只要有拒绝，剩下的请求就可以停止，再次请求打开权限了
                         } else { // 勾选不再询问，并拒绝
-                            Toast.makeText(this, "请到设置中打开权限", Toast.LENGTH_LONG).show();
+                             Tools.showtoast("请到设置中打开权限",mContext);
                             return;
                         }
                     }

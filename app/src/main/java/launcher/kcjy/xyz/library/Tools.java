@@ -1,6 +1,8 @@
 package launcher.kcjy.xyz.library;
 import android.Manifest;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.ApplicationInfo;
@@ -47,14 +49,15 @@ import launcher.kcjy.xyz.launcher;
 import launcher.kcjy.xyz.variable;
 
 public class Tools {
-
-public static void showtoast(String string){
-    Toast.makeText(launcher.mContext,string, Toast.LENGTH_SHORT).show();
+public static String activity(Context mContext){
+    ActivityManager am = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+    ComponentName cn = am.getRunningTasks(1).get(0).topActivity;
+    return cn.getClassName();
 }
-    public static void Enablewifi(boolean enable){
-        WifiManager wifiManager = (WifiManager) launcher.mContext.getSystemService(Context.WIFI_SERVICE);
-        wifiManager.setWifiEnabled(enable);
-    }
+public static void showtoast(String string,Context mContext){
+    Toast.makeText(mContext,string, Toast.LENGTH_SHORT).show();
+}
+
     public static String UrlPost(String ur, String byteString) {
         String str="";
         try {

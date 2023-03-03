@@ -145,7 +145,6 @@ private Runnable downapkrunnable = new Runnable() {
                     progressdialog.setProgress(progress);
                     break;
                 case DOWN_OVER:
-            Tools.showtoast("finish");
                 installApp(variable.filename);
                     break;
                 default:
