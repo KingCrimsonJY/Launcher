@@ -1,21 +1,31 @@
 package launcher.kcjy.xyz;
+import static launcher.kcjy.xyz.library.Tools.startapp;
+import static launcher.kcjy.xyz.library.Tools.uninstallapp;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.textclassifier.TextLinks;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,8 +36,14 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textview.MaterialTextView;
+
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import launcher.kcjy.xyz.App.epub.MenuActivity;
+import launcher.kcjy.xyz.library.ActManager;
 import launcher.kcjy.xyz.library.NewAppButton;
 import launcher.kcjy.xyz.library.Tools;
 import launcher.kcjy.xyz.library.update;
@@ -35,7 +51,6 @@ import launcher.kcjy.xyz.library.update;
 public class launcher extends AppCompatActivity {
    public Context mContext;
    private EditText edit;
-
 
       @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +64,13 @@ public class launcher extends AppCompatActivity {
         setContentView(R.layout.activity);
       init();
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        ActManager.finishAll();
+    }
+
     @SuppressLint("ResourceType")
     private void init(){
         this.mContext = this;
@@ -76,8 +98,6 @@ public class launcher extends AppCompatActivity {
 
         applist.setId(1);
         mryytl.setId(2);
-
-
         
         youdao.setId(1);
         calculator.setId(2);
@@ -97,7 +117,7 @@ public class launcher extends AppCompatActivity {
         mryytl.setOnClickListener(new apponclick());
 
 getReadPermissions();
-
+        appcheck();
     }
     
         class bottomapponclick implements View.OnClickListener {
@@ -105,22 +125,22 @@ getReadPermissions();
 		public void onClick(View v) {
             switch(v.getId()){
            case 1://有道词典
-             Tools.startapp(mContext,"com.youdao.hardware.dict");
+             startapp(mContext,"com.youdao.hardware.dict");
 			 break;
 	     case 2://计算器
-             Tools.startapp(mContext,"com.android.calculator2");
+             startapp(mContext,"com.android.calculator2");
 			  break;
 		 case 3://日历
-             Tools.startapp(mContext,"com.android.calendar");
+             startapp(mContext,"com.android.calendar");
 			 break;
 		 case 4://时钟
-             Tools.startapp(mContext,"com.android.deskclock");
+             startapp(mContext,"com.android.deskclock");
 			 break;
 	     case 5://喜马拉雅
-             Tools.startapp(mContext,"com.ximalaya.ting.kid");
+             startapp(mContext,"com.ximalaya.ting.kid");
 			 break;
 		 case 6://口语
-             Tools.startapp(mContext,"com.youdao.crackingenglish");
+             startapp(mContext,"com.youdao.crackingenglish");
 			 break;
                 default:
                 break;
@@ -148,7 +168,7 @@ if (Tools.checkapp(mContext,"com.eusoft.ting.en")) {
 else {
   Tools.showtoast("App not installed",mContext);
 }*/
-                 startActivity(new Intent(mContext, MenuActivity.class));
+                    if (check().equals("normal")||check().equals("unavailable")) startActivity(new Intent(mContext, MenuActivity.class));
                 break;
                 default:
                 break;
@@ -162,10 +182,10 @@ else {
             if (edit.getText().toString().contains("kingcrimsonjy")) {
                 switch (v.getId()) {
                     case 1:
-Tools.Applist(mContext,false);
+Applist(mContext,false);
                         break;
                     case 2:
-Tools.Applist(mContext,true);
+Applist(mContext,true);
                         break;
                     default:
                         break;
@@ -209,17 +229,126 @@ Tools.Applist(mContext,true);
             dialog.setView(layout);
             dialog.create().show();
         }
+private void appcheck(){
+          update up = new update(mContext);
+         Thread thread = new Thread(new Runnable() {
+              @Override
+              public void run() {
+                  while (true) {
+                      up.checkstate();
+                      Log.e(null,up.getState());
+                      if (up.getState().equals("unusable")||up.getState().equals("update")) {
+ActManager.finishAll();
+                      }
+                      try {
+                          Thread.sleep(10000);
+                      } catch (InterruptedException e) {
+                          throw new RuntimeException(e);
+                      }
+                  }
+              }
+          });
+         thread.start();
 
+}
         private String check(){
             update up = new update(mContext);
-            if (up.checkupdate().equals("unusable")||up.checkupdate().equals("unavailable")) {
-                Tools.showtoast(up.checkupdate(),mContext);
+          Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    up.checkstate();
+                }
+            });
+          thread.start();
+            while (thread.isAlive()){}
+            String str = up.getState();
+            if (str.equals("unusable")) {
+                Tools.showtoast(up.getState(),mContext);
             }
-            if (up.checkupdate().equals("update")){
+            if (str.equals("unavailable")){
+                Tools.showtoast("网络状态不佳",mContext);
+            }
+            if (str.equals("update")){
                 up.updatedialog();
             }
-            return up.checkupdate();
+            return str;
         }
+    public static void Applist(Context context, boolean isSystem){
+        android.app.AlertDialog.Builder appdialog = new android.app.AlertDialog.Builder(context);
+        appdialog.setTitle("应用列表");
+        appdialog.setCancelable(false);
+        appdialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        ScrollView listlayout = new ScrollView(context);
+        listlayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+        LinearLayout mainlayout = new LinearLayout(context);
+        mainlayout.setOrientation(LinearLayout.VERTICAL);
+        mainlayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+        listlayout.addView(mainlayout);
+        appdialog.setView(listlayout);
+        PackageManager pkgmanager = context.getPackageManager();
+        List<PackageInfo> list = pkgmanager.getInstalledPackages(0);
+        for (PackageInfo p : list){
+            LinearLayout layout = new LinearLayout(context);
+            layout.setOrientation(LinearLayout.HORIZONTAL);
+            layout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,100));
+
+            ImageView appimage = new ImageView(context);
+            appimage.setLayoutParams(new LinearLayout.LayoutParams(100,ViewGroup.LayoutParams.MATCH_PARENT));
+
+            LinearLayout sublayout = new LinearLayout(context);
+            sublayout.setOrientation(LinearLayout.VERTICAL);
+            sublayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            sublayout.setGravity(Gravity.CENTER);
+
+            MaterialTextView appname = new MaterialTextView(context);
+            appname.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            appname.setTextSize(18);
+            appname.setTypeface(null, Typeface.BOLD);
+
+            MaterialTextView pkgname = new MaterialTextView(context);
+            pkgname.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            pkgname.setTextSize(13);
+
+            layout.addView(appimage);
+            layout.addView(sublayout);
+            sublayout.addView(appname);
+            sublayout.addView(pkgname);
+
+            appimage.setImageDrawable(p.applicationInfo.loadIcon(pkgmanager));
+            appname.setText(pkgmanager.getApplicationLabel(p.applicationInfo).toString());
+            pkgname.setText(p.applicationInfo.packageName);
+            layout.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    uninstallapp(context,pkgname.getText().toString());
+                    return false;
+                }
+            });
+            layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startapp(context,pkgname.getText().toString());
+                }
+            });
+            int flags = p.applicationInfo.flags;
+            if (isSystem){
+                mainlayout.addView(layout);
+            }
+            else {
+                if ((flags & ApplicationInfo.FLAG_SYSTEM) == 0){
+                    mainlayout.addView(layout);
+                }
+            }
+        }
+        appdialog.create().show();
+    }
     private void getReadPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {

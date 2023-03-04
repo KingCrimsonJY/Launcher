@@ -78,82 +78,7 @@ public static void showtoast(String string,Context mContext){
         return str;
     }
 
-    public static void Applist(Context context, boolean isSystem){
-      AlertDialog.Builder appdialog = new AlertDialog.Builder(context);
-        appdialog.setTitle("应用列表");
-        appdialog.setCancelable(false);
-         appdialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-dialog.dismiss();
-            }
-        });
-        ScrollView listlayout = new ScrollView(context);
-        listlayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
-        LinearLayout mainlayout = new LinearLayout(context);
-        mainlayout.setOrientation(LinearLayout.VERTICAL);
-        mainlayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
-        listlayout.addView(mainlayout);
-        appdialog.setView(listlayout);
-        PackageManager pkgmanager = context.getPackageManager();
-        List<PackageInfo> list = pkgmanager.getInstalledPackages(0);
-        for (PackageInfo p : list){
-            LinearLayout layout = new LinearLayout(context);
-            layout.setOrientation(LinearLayout.HORIZONTAL);
-            layout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,100));
-
-            ImageView appimage = new ImageView(context);
-            appimage.setLayoutParams(new LinearLayout.LayoutParams(100,ViewGroup.LayoutParams.MATCH_PARENT));
-
-            LinearLayout sublayout = new LinearLayout(context);
-            sublayout.setOrientation(LinearLayout.VERTICAL);
-            sublayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            sublayout.setGravity(Gravity.CENTER);
-
-            MaterialTextView appname = new MaterialTextView(context);
-            appname.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            appname.setTextSize(18);
-            appname.setTypeface(null, Typeface.BOLD);
-
-            MaterialTextView pkgname = new MaterialTextView(context);
-            pkgname.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            pkgname.setTextSize(13);
-
-            layout.addView(appimage);
-            layout.addView(sublayout);
-            sublayout.addView(appname);
-            sublayout.addView(pkgname);
-
-            appimage.setImageDrawable(p.applicationInfo.loadIcon(pkgmanager));
-            appname.setText(pkgmanager.getApplicationLabel(p.applicationInfo).toString());
-            pkgname.setText(p.applicationInfo.packageName);
-            layout.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    uninstallapp(context,pkgname.getText().toString());
-                    return false;
-                }
-            });
-            layout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startapp(context,pkgname.getText().toString());
-                }
-            });
-            int flags = p.applicationInfo.flags;
-            if (isSystem){
-                mainlayout.addView(layout);
-            }
-            else {
-                if ((flags & ApplicationInfo.FLAG_SYSTEM) == 0){
-                    mainlayout.addView(layout);
-                }
-            }
-        }
-appdialog.create().show();
-    }
 
     public static boolean Network(Context context) {
         ConnectivityManager manager = (ConnectivityManager) context
@@ -206,6 +131,13 @@ return true;
 		context.startActivity(intent);
 		return true;
 	}
+    public static boolean startapp2(Context context, String packagename,String activity) {
+        PackageManager packageManager=context.getPackageManager();
+        Intent intent=new Intent();
+        intent.setClassName(packagename,activity);
+        context.startActivity(intent);
+        return true;
+    }
     public static boolean uninstallapp(Context context, String packagename) {
         if (TextUtils.isEmpty(packagename)){
             return false;

@@ -29,6 +29,8 @@ import com.github.mertakdut.CssStatus;
 import com.github.mertakdut.Reader;
 import com.github.mertakdut.exception.OutOfPagesException;
 import com.github.mertakdut.exception.ReadingException;
+
+import launcher.kcjy.xyz.library.ActManager;
 import launcher.kcjy.xyz.R;
 
 public class MainActivity extends AppCompatActivity implements PageFragment.OnFragmentReadyListener{
@@ -53,8 +55,7 @@ public class MainActivity extends AppCompatActivity implements PageFragment.OnFr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ActManager actm = new ActManager();
-        actm.addActivity(this);
+     ActManager.addActivity(this);
 
 
         pxScreenWidth = getResources().getDisplayMetrics().widthPixels;

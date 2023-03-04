@@ -38,10 +38,8 @@ private int progress;
     public update(Context mcontext){
     this.context = mcontext;
 }
-    public String checkupdate(){
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
+    public void checkstate(){
+
         if (Tools.Network(context)) {
             try {
                 String content = Tools.UrlPost(variable.url, "");
@@ -63,14 +61,13 @@ private int progress;
         else {
             state = "unavailable";
         }
+    }
 
-            }
-        });
-        thread.start();
-        while (thread.isAlive()){}
+    public String getState() {
         return state;
     }
-public void updatedialog(){
+
+    public void updatedialog(){
     AlertDialog.Builder dialog = new AlertDialog.Builder(context);
     dialog.setCancelable(true);
     dialog.setTitle("Update");

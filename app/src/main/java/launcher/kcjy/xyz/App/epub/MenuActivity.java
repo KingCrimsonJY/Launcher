@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import launcher.kcjy.xyz.library.ActManager;
 import launcher.kcjy.xyz.R;
 
 public class MenuActivity extends AppCompatActivity {
@@ -31,9 +32,7 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        ActManager actm = new ActManager();
-        actm.addActivity(this);
-
+        ActManager.addActivity(this);
         ((GridView) findViewById(R.id.grid_book_info)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -46,6 +45,8 @@ public class MenuActivity extends AppCompatActivity {
 
         new ListBookInfoTask().execute();
     }
+
+
 
     private class ListBookInfoTask extends AsyncTask<Object, Object, List<BookInfo>> {
 
