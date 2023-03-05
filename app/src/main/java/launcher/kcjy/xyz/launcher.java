@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import launcher.kcjy.xyz.App.browser.Activity.BrowserActivity;
 import launcher.kcjy.xyz.App.epub.MenuActivity;
 import launcher.kcjy.xyz.library.ActManager;
 import launcher.kcjy.xyz.library.NewAppButton;
@@ -83,11 +84,13 @@ public class launcher extends AppCompatActivity {
       NewAppButton speaking = new NewAppButton(mContext,R.drawable.speaking,"有道口语",14);
       NewAppButton applist = new NewAppButton(mContext,R.drawable.applist,"应用列表",17);
       NewAppButton mryytl = new NewAppButton(mContext,R.drawable.epub,"Epub阅读器",17);
+      NewAppButton browser = new NewAppButton(mContext,R.drawable.browser,"浏览器",17);
 
       LinearLayout layout1 = findViewById(R.id.layout1);
       LinearLayout bottomapp = findViewById(R.id.bottomapp);
         layout1.addView(applist);
         layout1.addView(mryytl);
+        layout1.addView(browser);
 
         bottomapp.addView(youdao);
         bottomapp.addView(calculator);
@@ -98,7 +101,8 @@ public class launcher extends AppCompatActivity {
 
         applist.setId(1);
         mryytl.setId(2);
-        
+        browser.setId(3);
+
         youdao.setId(1);
         calculator.setId(2);
         calendar.setId(3);
@@ -115,6 +119,7 @@ public class launcher extends AppCompatActivity {
 
         applist.setOnClickListener(new apponclick());
         mryytl.setOnClickListener(new apponclick());
+        browser.setOnClickListener(new apponclick());
 
 getReadPermissions();
         appcheck();
@@ -170,6 +175,9 @@ else {
 }*/
                     if (check().equals("normal")||check().equals("unavailable")) startActivity(new Intent(mContext, MenuActivity.class));
                 break;
+                case 3:
+                    if (check().equals("normal")) startActivity(new Intent(mContext, BrowserActivity.class));
+                    break;
                 default:
                 break;
             }

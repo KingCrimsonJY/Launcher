@@ -9,7 +9,10 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
+    <uses-permission android:name="android.permission.CAMERA"></uses-permission>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,23 +23,28 @@
         android:theme="@style/Theme.Application.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".App.browser.Activity.BrowserActivity"
-            android:exported="false" />
-        <activity
-            android:name=".launcher"
-            android:exported="true"
-            android:launchMode="singleTask"
-            android:screenOrientation="landscape">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        android:name=".launcher"
+        android:exported="true"
+        android:screenOrientation="landscape">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.HOME" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".App.epub.MenuActivity" />
-        <activity android:name=".App.epub.MainActivity" />
+            <category android:name="android.intent.category.HOME" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
+        <activity
+            android:name=".App.browser.Activity.BrowserActivity"
+            android:screenOrientation="landscape"
+            android:hardwareAccelerated="true"
+            android:configChanges="orientation|screenSize"
+            android:exported="false" />
+
+        <activity android:name=".App.epub.MenuActivity"
+            android:screenOrientation="landscape" />
+        <activity android:name=".App.epub.MainActivity"
+            android:screenOrientation="landscape" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
