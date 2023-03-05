@@ -89,6 +89,7 @@ public static void showtoast(String string,Context mContext){
         }
         return false;
     }
+
     
     public static void 存储权限(Context context) {
         Activity activity1 = (Activity) context;
@@ -131,12 +132,8 @@ return true;
 		context.startActivity(intent);
 		return true;
 	}
-    public static boolean startapp2(Context context, String packagename,String activity) {
-        PackageManager packageManager=context.getPackageManager();
-        Intent intent=new Intent();
-        intent.setClassName(packagename,activity);
-        context.startActivity(intent);
-        return true;
+    public static void writeassets() {
+
     }
     public static boolean uninstallapp(Context context, String packagename) {
         if (TextUtils.isEmpty(packagename)){

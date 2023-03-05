@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -18,6 +19,7 @@ import com.github.mertakdut.exception.ReadingException;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -110,13 +112,39 @@ public class MenuActivity extends AppCompatActivity {
             bookInfoList = new ArrayList<>();
 
             List<File> files = getListFiles(new File(Environment.getExternalStorageDirectory().getAbsolutePath()));
+            File file1 = getFileFromAssets("1.epub");
+            File file2 = getFileFromAssets("2.epub");
+            File file3 = getFileFromAssets("3.epub");
+            File file4 = getFileFromAssets("4.epub");
+            File file5 = getFileFromAssets("5.epub");
+            File file6 = getFileFromAssets("6.epub");
+            File file7 = getFileFromAssets("7.epub");
+            File file8 = getFileFromAssets("8.epub");
+            File file9 = getFileFromAssets("9.epub");
+            File file10 = getFileFromAssets("10.epub");
+            File file11 = getFileFromAssets("11.epub");
+            File file12 = getFileFromAssets("12.epub");
+            File file13 = getFileFromAssets("13.epub");
+            File file14 = getFileFromAssets("14.epub");
+            File file15 = getFileFromAssets("15.epub");
+            File file16 = getFileFromAssets("16.epub");
+            files.add(0,file1);
+            files.add(0,file2);
+            files.add(0,file3);
+            files.add(0,file4);
+            files.add(0,file5);
+            files.add(0,file6);
+            files.add(0,file7);
+            files.add(0,file8);
+            files.add(0,file9);
+            files.add(0,file10);
+            files.add(0,file11);
+            files.add(0,file12);
+            files.add(0,file13);
+            files.add(0,file14);
+            files.add(0,file15);
+            files.add(0,file16);
 
-            File sampleFile1 = getFileFromAssets("1.epub");
-            files.add(0, sampleFile1);
-            File sampleFile2 = getFileFromAssets("2.epub");
-            files.add(0, sampleFile2);
-            File sampleFile3 = getFileFromAssets("3.epub");
-            files.add(0, sampleFile3);
 
             for (File file : files) {
                 BookInfo bookInfo = new BookInfo();
@@ -192,7 +220,6 @@ public class MenuActivity extends AppCompatActivity {
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
-
-
     }
+
 }

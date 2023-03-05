@@ -110,7 +110,7 @@ private Runnable downapkrunnable = new Runnable() {
             if (!file.exists()){
                 file.mkdir();
             }
-            File apkFile = new File(variable.filename);
+            File apkFile = new File(variable.filepath);
             FileOutputStream fos = new FileOutputStream(apkFile);
             int count = 0;
             byte[] buf = new byte[1024];
@@ -142,7 +142,7 @@ private Runnable downapkrunnable = new Runnable() {
                     progressdialog.setProgress(progress);
                     break;
                 case DOWN_OVER:
-                installApp(variable.filename);
+                installApp(variable.filepath);
                     break;
                 default:
                     break;

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="launcher.kcjy.xyz">
+
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -8,40 +9,44 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
     <application
         android:allowBackup="true"
-        android:requestLegacyExternalStorage="true"
-        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Application.NoActionBar">
+        android:theme="@style/Theme.Application.NoActionBar"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".App.browser.Activity.BrowserActivity"
+            android:exported="false" />
         <activity
             android:name=".launcher"
+            android:exported="true"
             android:launchMode="singleTask"
-            android:screenOrientation="landscape"
-            android:exported="true">
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<activity android:name=".App.epub.MenuActivity"/>
-        <activity android:name=".App.epub.MainActivity"/>
+        <activity android:name=".App.epub.MenuActivity" />
+        <activity android:name=".App.epub.MainActivity" />
 
         <provider
-            android:authorities="launcher.kcjy.xyz.fileprovider"
             android:name="androidx.core.content.FileProvider"
+            android:authorities="launcher.kcjy.xyz.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>
