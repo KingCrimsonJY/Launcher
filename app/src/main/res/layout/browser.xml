@@ -23,6 +23,8 @@
                 android:singleLine="true"
                 android:background="@color/grey"
                 android:layout_width="0dp"
+                android:hint="请输入网址"
+                android:textColorHint="@color/greywhite"
                 android:layout_height="match_parent"
                 android:textColor="@color/white"/>
 

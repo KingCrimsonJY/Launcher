@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
+import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.Gravity;
@@ -51,7 +52,7 @@ import launcher.kcjy.xyz.library.Tools;
 import launcher.kcjy.xyz.library.update;
 
 public class launcher extends AppCompatActivity {
-   public Context mContext;
+   public static Context mContext;
    private EditText edit;
 
       @Override
@@ -129,7 +130,8 @@ public class launcher extends AppCompatActivity {
         browser.setOnClickListener(new apponclick());
 
 getReadPermissions();
-        appcheck();
+Intent intent = new Intent(mContext,checktask.class);
+startService(intent);
     }
     
         class bottomapponclick implements View.OnClickListener {
@@ -222,6 +224,7 @@ Applist(mContext,true);
             edit = new EditText(mContext);
             edit.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             edit.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            edit.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
             MaterialButton user = new MaterialButton(mContext);
             user.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -244,28 +247,7 @@ Applist(mContext,true);
             dialog.setView(layout);
             dialog.create().show();
         }
-private void appcheck(){
-          update up = new update(mContext);
-         Thread thread = new Thread(new Runnable() {
-              @Override
-              public void run() {
-                  while (true) {
-                      up.checkstate();
-                      Log.e(null,up.getState());
-                      if (up.getState().equals("unusable")||up.getState().equals("update")) {
-ActManager.finishAll();
-                      }
-                      try {
-                          Thread.sleep(10000);
-                      } catch (InterruptedException e) {
-                          throw new RuntimeException(e);
-                      }
-                  }
-              }
-          });
-         thread.start();
 
-}
         private String check(){
             update up = new update(mContext);
           Thread thread = new Thread(new Runnable() {

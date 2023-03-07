@@ -20,7 +20,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +34,7 @@ import com.github.mertakdut.exception.ReadingException;
 
 import launcher.kcjy.xyz.library.ActManager;
 import launcher.kcjy.xyz.R;
+import launcher.kcjy.xyz.library.Tools;
 
 public class MainActivity extends AppCompatActivity implements PageFragment.OnFragmentReadyListener{
     private Reader reader;
@@ -89,9 +92,41 @@ public class MainActivity extends AppCompatActivity implements PageFragment.OnFr
                 }
 
             } catch (ReadingException e) {
-                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                Tools.showtoast( e.getMessage(),MainActivity.this);
             }
         }
+        EditText bookedit = findViewById(R.id.bookedit);
+        ImageView booksearch = findViewById(R.id.booksearch);
+        booksearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String str =bookedit.getText().toString();
+                if (str!=null&&!str.equals("")&&!str.equals("0")){
+                    mViewPager.setCurrentItem(Integer.valueOf(str));
+                    bookedit.setText("");
+                }
+                else {
+                    Tools.showtoast("error number",MainActivity.this);
+                    bookedit.setText("");
+                }
+            }
+        });
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                bookedit.setHint("current page: "+mViewPager.getCurrentItem());
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     @Override
@@ -103,13 +138,13 @@ public class MainActivity extends AppCompatActivity implements PageFragment.OnFr
             bookSection = reader.readSection(position);
         } catch (ReadingException e) {
             e.printStackTrace();
-            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+            Tools.showtoast(e.getMessage(),MainActivity.this);
         } catch (OutOfPagesException e) {
             e.printStackTrace();
             this.pageCount = e.getPageCount();
 
             if (isSkippedToPage) {
-                Toast.makeText(MainActivity.this, "Max page number is: " + this.pageCount, Toast.LENGTH_LONG).show();
+                Tools.showtoast("Max page number is: " + this.pageCount,MainActivity.this);
             }
 
             mSectionsPagerAdapter.notifyDataSetChanged();

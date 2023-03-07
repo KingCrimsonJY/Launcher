@@ -45,7 +45,9 @@
         <activity android:name=".App.epub.MenuActivity"
             android:screenOrientation="landscape" />
         <activity android:name=".App.epub.MainActivity"
+            android:windowSoftInputMode="adjustNothing"
             android:screenOrientation="landscape" />
+<service android:name=".checktask"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"
