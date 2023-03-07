@@ -38,6 +38,7 @@
             android:name=".App.browser.Activity.BrowserActivity"
             android:screenOrientation="landscape"
             android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustNothing"
             android:configChanges="orientation|screenSize"
             android:exported="false" />
 

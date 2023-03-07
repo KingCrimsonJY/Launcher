@@ -37,9 +37,8 @@ private EditText edit;
         if (keyCode==KeyEvent.KEYCODE_BACK){
             if (mAgentWeb.getWebCreator().getWebView().getUrl().equals(variable.browserurl))ActManager.finishAll();
             else mAgentWeb.back();
-            return true;
         }
-        return super.onKeyDown(keyCode, event);
+        return true;
     }
 private void init(){
     LinearLayout web = findViewById(R.id.web);

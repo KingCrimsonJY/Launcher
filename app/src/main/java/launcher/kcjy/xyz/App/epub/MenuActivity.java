@@ -119,15 +119,7 @@ public class MenuActivity extends AppCompatActivity {
             File file5 = getFileFromAssets("5.epub");
             File file6 = getFileFromAssets("6.epub");
             File file7 = getFileFromAssets("7.epub");
-            File file8 = getFileFromAssets("8.epub");
-            File file9 = getFileFromAssets("9.epub");
-            File file10 = getFileFromAssets("10.epub");
-            File file11 = getFileFromAssets("11.epub");
-            File file12 = getFileFromAssets("12.epub");
-            File file13 = getFileFromAssets("13.epub");
-            File file14 = getFileFromAssets("14.epub");
-            File file15 = getFileFromAssets("15.epub");
-            File file16 = getFileFromAssets("16.epub");
+
             files.add(0,file1);
             files.add(0,file2);
             files.add(0,file3);
@@ -135,15 +127,7 @@ public class MenuActivity extends AppCompatActivity {
             files.add(0,file5);
             files.add(0,file6);
             files.add(0,file7);
-            files.add(0,file8);
-            files.add(0,file9);
-            files.add(0,file10);
-            files.add(0,file11);
-            files.add(0,file12);
-            files.add(0,file13);
-            files.add(0,file14);
-            files.add(0,file15);
-            files.add(0,file16);
+
 
 
             for (File file : files) {
