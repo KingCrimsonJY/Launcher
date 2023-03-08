@@ -5,6 +5,6 @@ public class variable {
     public static String browserurl = "https://cn.bing.com/";
     public static String checkcode = "kingcrimsonjy";
     public static int nowversion = 6;
-    public static String path = "/storage/emulated/0/Android/data/launcher.kcjy.xyz/files";
-    public static String filepath = path+"/update/update.apk";
+    public static String path = "/storage/emulated/0/Android/data/launcher.kcjy.xyz/files/update";
+    public static String filepath = path+"/update.apk";
 }
