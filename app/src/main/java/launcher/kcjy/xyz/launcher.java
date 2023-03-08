@@ -259,15 +259,10 @@ Applist(mContext,true);
           thread.start();
             while (thread.isAlive()){}
             String str = up.getState();
-            if (str.equals("unusable")) {
-                Tools.showtoast(up.getState(),mContext);
-            }
-            if (str.equals("unavailable")){
-                Tools.showtoast("网络状态不佳",mContext);
-            }
-            if (str.equals("update")){
-                up.updatedialog();
-            }
+            if (str.equals("unusable")) Tools.showtoast("不可用",mContext);
+            if (str.equals("unavailable"))Tools.showtoast("未连接网络",mContext);
+            if (str.equals("networkerror"))Tools.showtoast("网络连接错误，请尝试重新链接网络",mContext);
+            if (str.equals("update"))up.updatedialog();
             return str;
         }
     public static void Applist(Context context, boolean isSystem){

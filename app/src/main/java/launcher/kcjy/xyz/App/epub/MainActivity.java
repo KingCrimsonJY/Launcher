@@ -165,13 +165,13 @@ public class MainActivity extends AppCompatActivity implements PageFragment.OnFr
         super.onStop();
         try {
             reader.saveProgress(mViewPager.getCurrentItem());
-            Toast.makeText(MainActivity.this, "Saved page: " + mViewPager.getCurrentItem() + "...", Toast.LENGTH_LONG).show();
+            Tools.showtoast("Saved page: " + mViewPager.getCurrentItem() + "...",MainActivity.this);
         } catch (ReadingException e) {
             e.printStackTrace();
-            Toast.makeText(MainActivity.this, "Progress is not saved: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Tools.showtoast("Progress is not saved: " + e.getMessage(),MainActivity.this);
         } catch (OutOfPagesException e) {
             e.printStackTrace();
-            Toast.makeText(MainActivity.this, "Progress is not saved. Out of Bounds. Page Count: " + e.getPageCount(), Toast.LENGTH_LONG).show();
+            Tools.showtoast("Progress is not saved. Out of Bounds. Page Count: " + e.getPageCount(),MainActivity.this);
         }
     }
 

@@ -18,7 +18,7 @@ import launcher.kcjy.xyz.library.ActManager;
 import launcher.kcjy.xyz.library.update;
 
 public class checktask extends Service {
-    int TIME_INTERVAL = 20000; // 这是5s
+    int TIME_INTERVAL = 20000;
     PendingIntent pendingIntent;
     AlarmManager alarmManager;
 
@@ -36,7 +36,7 @@ public class checktask extends Service {
             alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), pendingIntent);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {//4.4以上 需要使用该方法精确执行时间
             alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), pendingIntent);
-        } else {//4。4一下 使用老方法
+        } else {
             alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), TIME_INTERVAL, pendingIntent);
         }
     }
@@ -66,9 +66,7 @@ public class checktask extends Service {
                     public void run() {
                             up.checkstate();
                             Log.e(null,up.getState());
-                            if (up.getState().equals("unusable")||up.getState().equals("update")) {
-                                ActManager.finishAll();
-                            }
+                            if (up.getState().equals("unusable")||up.getState().equals("update")) ActManager.finishAll();
                         }
                 });
                 thread.start();

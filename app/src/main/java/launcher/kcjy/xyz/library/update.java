@@ -34,7 +34,7 @@ private String downloadlink;
 private int progress;
     private static final int DOWN_UPDATE = 1;
     private static final int DOWN_OVER = 2;
-    public String state;
+    public String state =null;
     public update(Context mcontext){
     this.context = mcontext;
 }
@@ -43,24 +43,20 @@ private int progress;
         if (Tools.Network(context)) {
             try {
                 String content = Tools.UrlPost(variable.url, "");
-                JSONObject jsonObject = new JSONObject(content);
-                int version = jsonObject.getInt("version");
-                boolean usestate = jsonObject.getBoolean("usestate");
-                downloadlink = jsonObject.getString("downloadlink");
-                if (!usestate) {
-                    state = "unusable";
-                } else if (variable.nowversion != version) {
-                    state = "update";
-                } else {
-                    state = "normal";
+                if (content.contains(variable.checkcode)) {
+                    JSONObject jsonObject = new JSONObject(content);
+                    int version = jsonObject.getInt("version");
+                    boolean usestate = jsonObject.getBoolean("usestate");
+                    downloadlink = jsonObject.getString("downloadlink");
+                    if (!usestate) state = "unusable";
+                    else if (variable.nowversion != version) state = "update";
+                    else state = "normal";
                 }
-
+else state="networkerror";
             } catch (Exception e) {
             }
         }
-        else {
-            state = "unavailable";
-        }
+        else state = "unavailable";
     }
 
     public String getState() {
