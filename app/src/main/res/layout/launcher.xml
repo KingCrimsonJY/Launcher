@@ -41,7 +41,7 @@
              android:orientation="horizontal"
              android:paddingLeft="85dp"
              android:layout_weight="1"
-             android:paddingTop="20dp">
+             android:paddingTop="24dp">
 
             <com.google.android.material.card.MaterialCardView
                  android:layout_height="match_parent"

@@ -8,24 +8,23 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+
 import com.github.mertakdut.Reader;
 import com.github.mertakdut.exception.ReadingException;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import launcher.kcjy.xyz.library.ActManager;
 import launcher.kcjy.xyz.R;
+import launcher.kcjy.xyz.library.Tools;
 
 public class MenuActivity extends AppCompatActivity {
     private ProgressBar progressBar;
@@ -33,7 +32,7 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu);
+        setContentView(R.layout.book_menu);
         ActManager.addActivity(this);
         ((GridView) findViewById(R.id.grid_book_info)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -68,7 +67,6 @@ public class MenuActivity extends AppCompatActivity {
             for (BookInfo bookInfo : bookInfoList) {
                 try {
                     reader.setInfoContent(bookInfo.getFilePath());
-
                     String title = reader.getInfoPackage().getMetadata().getTitle();
                     if (title != null && !title.equals("")) {
                         bookInfo.setTitle(reader.getInfoPackage().getMetadata().getTitle());
@@ -98,7 +96,7 @@ public class MenuActivity extends AppCompatActivity {
             }
 
             if (occuredException != null) {
-                Toast.makeText(MenuActivity.this, occuredException.getMessage(), Toast.LENGTH_LONG).show();
+                Tools.showtoast(occuredException.getMessage(),MenuActivity.this);
             }
         }
     }

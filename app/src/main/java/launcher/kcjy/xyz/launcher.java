@@ -4,7 +4,6 @@ import static launcher.kcjy.xyz.library.Tools.uninstallapp;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,21 +13,16 @@ import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
-import android.provider.Settings;
-import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.textclassifier.TextLinks;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -41,8 +35,6 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import launcher.kcjy.xyz.App.browser.Activity.BrowserActivity;
 import launcher.kcjy.xyz.App.epub.MenuActivity;
@@ -64,7 +56,7 @@ public class launcher extends AppCompatActivity {
             //调用hide()方法将标题栏隐藏起来
             actionbar.hide();
         }
-        setContentView(R.layout.activity);
+        setContentView(R.layout.launcher);
       init();
     }
 
@@ -139,7 +131,7 @@ startService(intent);
 		public void onClick(View v) {
             switch(v.getId()){
            case 1://有道词典
-             startapp(mContext,"com.youdao.hardware.dict");
+             Tools.showtoast("请点击实体键盘中部红色圆键以打开",mContext);
 			 break;
 	     case 2://计算器
              startapp(mContext,"com.android.calculator2");
@@ -224,7 +216,6 @@ Applist(mContext,true);
             edit = new EditText(mContext);
             edit.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             edit.setTransformationMethod(PasswordTransformationMethod.getInstance());
-            edit.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
             MaterialButton user = new MaterialButton(mContext);
             user.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));

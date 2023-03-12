@@ -25,7 +25,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import com.github.mertakdut.BookSection;
 import com.github.mertakdut.CssStatus;
 import com.github.mertakdut.Reader;
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements PageFragment.OnFr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.book_read);
      ActManager.addActivity(this);
 
 
